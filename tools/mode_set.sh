@@ -38,7 +38,7 @@ done
 
 echo "dsdfsdfs"
 
-if ["$mon_mode"=true]; then
+if [ "$mon_mode" = true ]; then
     echo "Enabling monitor mode for $iface"
     airmon-ng start ${iface}
     iwconfig

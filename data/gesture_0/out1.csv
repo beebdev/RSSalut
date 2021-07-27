@@ -1,0 +1,8 @@
+"No.","Time","Source","Destination","Protocol","Length","Signal strength (dBm)","Frequency","Data rate","Info"
+"48","0.690875205","TP-Link_da:df:47","Broadcast","802.11","446","-45 dBm","2422MHz","1","Beacon frame, SN=291, FN=0, Flags=........C, BI=100, SSID=Olufsen60"
+"214","6.788057299","TP-Link_da:df:47","Broadcast","802.11","446","-49 dBm","2417MHz","1","Beacon frame, SN=426, FN=0, Flags=........C, BI=100, SSID=Olufsen60"
+"217","6.891963628","TP-Link_da:df:47","Broadcast","802.11","446","-45 dBm","2422MHz","1","Beacon frame, SN=430, FN=0, Flags=........C, BI=100, SSID=Olufsen60"
+"248","7.098092520","TP-Link_da:df:47","Broadcast","802.11","446","-47 dBm","2432MHz","1","Beacon frame, SN=443, FN=0, Flags=........C, BI=100, SSID=Olufsen60"
+"383","13.200094667","TP-Link_da:df:47","Broadcast","802.11","446","-47 dBm","2427MHz","1","Beacon frame, SN=588, FN=0, Flags=........C, BI=100, SSID=Olufsen60"
+"390","13.298744970","TP-Link_da:df:47","Broadcast","802.11","446","-45 dBm","2432MHz","1","Beacon frame, SN=592, FN=0, Flags=........C, BI=100, SSID=Olufsen60"
+"397","13.402099357","TP-Link_da:df:47","Broadcast","802.11","446","-51 dBm","2437MHz","1","Beacon frame, SN=594, FN=0, Flags=........C, BI=100, SSID=Olufsen60"
