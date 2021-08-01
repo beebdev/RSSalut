@@ -36,7 +36,7 @@ def gesture_decode(signal, trigger_factor, pps):
     decode = "n"
     s_min = min(signal)
     s_max = max(signal)
-    trigger = (s_max - s_min) / trigger_factor
+    trigger = (s_max - s_min) / 5
     n_timer = 0
 
     inc = 45
@@ -75,7 +75,7 @@ def next_big_thing(signal, start, trigger_factor):
     """
     s_min = min(signal)
     s_max = max(signal)
-    trigger = (s_max - s_min) / trigger_factor
+    trigger = abs((s_max - s_min) / 25)
 
     prev = signal[start]
     for i in range(start+10, len(signal), 10):
@@ -92,7 +92,7 @@ def next_big_thing(signal, start, trigger_factor):
 class RSSalut:
     # factors
     res_factor = 3
-    smooth_factor = 12
+    smooth_factor = 40
     trig_sensitivity = 5
 
     # macros
@@ -191,19 +191,19 @@ class RSSalut:
                 # for t in range(0, len(self.reference[i][j]), 110):
                 t = 0
                 while t < len(sig):
-                    res = next_big_thing(sig, t, 5)
+                    res = next_big_thing(sig, t, 6)
                     if res == -1:
                         break
                     elif res < self.pps:
-                        t += 30
+                        t += 50
                         continue
                     else:
-                        t = res
+                        t = res - 50
 
                     code = gesture_decode(
-                        sig[t-30:t+int(self.pps*4)], 5, self.pps)
+                        sig[t:t+int(self.pps*4)], 3, self.pps)
                     print("\t@", t, "-", self.timeline[i][j][t], code)
-                    t += self.pps*2
+                    t += self.pps*3
                     # print(RSS_decode(self.reference[i][j], self.trig_sensitivity))
 
 
