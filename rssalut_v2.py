@@ -241,15 +241,15 @@ class RSSalut:
         """ Plots out the dBm signal
         """
         plt.figure(figsize=(12, 2))
-        plt.plot(self.timeline, self.dBm, markevery=[
-                 x in self.marks for x in self.timeline], marker="o")
+        plt.plot(self.timeline, self.dBm)  # , markevery=[
+        # x in self.marks for x in self.timeline], marker="o")
         plt.xlabel('Time (s)')
         plt.ylabel('RSS (dBm)')
         plt.savefig(filename[:-3]+".png")
 
 
 if __name__ == "__main__":
-    n_start = 0
+    n_start = 9
 
     n_tests = 9
     for i in range(n_start, n_tests+1):

@@ -6,7 +6,7 @@ from numpy.core.numeric import Inf
 from numpy.lib.function_base import median
 import pywt
 from fastdtw import fastdtw
-import mlpy
+# import mlpy
 from scipy.spatial.distance import euclidean
 from scipy import stats
 import sklearn.preprocessing as skprep
@@ -15,7 +15,7 @@ import numpy as np
 res_factor = 5
 smooth_factor = 15
 trigger_sensitivity = 7
-gestures = ["leg_v", "leg_h", "leg_s", "hand_s"]
+# gestures = ["leg_v", "leg_h", "leg_s", "hand_s"]
 
 reference = {}
 time = {}
@@ -52,8 +52,8 @@ def extract_signal(filename):
     timeline = timeline[::res_factor]
     dBm = dBm[::res_factor]
     dBm = skprep.scale(
-            dBm, axis=0, with_mean=True, with_std=True, copy=True
-        )
+        dBm, axis=0, with_mean=True, with_std=True, copy=True
+    )
 
     # Denoising
     w = pywt.Wavelet('haar')
@@ -65,7 +65,7 @@ def extract_signal(filename):
                   for i in w_coef[1:])
     denoised_dBm = pywt.waverec(w_coef, 'haar')
 
-    #smooth
+    # smooth
     box = np.ones(smooth_factor)/smooth_factor
     denoised_dBm = np.convolve(denoised_dBm, box, mode='same')
     return denoised_dBm, timeline
@@ -97,6 +97,7 @@ def extract_references():
     # extract_ref("data/leg_inf/leg_i_03.csv", "leg_i")
     extract_ref("data/hand_snatch/hand_s_01.csv", "hand_s")
 
+
 def RSS_decode(signal):
     encode = "n"
     s_min = min(signal)
@@ -107,7 +108,7 @@ def RSS_decode(signal):
     sw_start = False
     i = 10
     while i < len(signal) and stopwatch < 250:
-    # for i in range(10, len(signal), 10):
+        # for i in range(10, len(signal), 10):
         if sw_start == True:
             stopwatch += 1
         curr = signal[i]
@@ -133,13 +134,13 @@ def RSS_dtw(x, y):
     dist, _ = fastdtw(x, y, dist=euclidean)
     return dist
 
+
 def classify_test(filename):
     denoised_dBm, _ = extract_signal(filename)
     test_cases = []
     sublen = int(len(denoised_dBm) / 3)
     for i in range(0, 3):
         test_cases.append(denoised_dBm[sublen*i:sublen*(i+1)])
-
 
     for case in test_cases:
         best = Inf
@@ -161,6 +162,7 @@ def classify_test(filename):
         print("choose: ", tag, best)
         # break
 
+
 def show_signal(gesture):
     plt.figure()
     print(gesture, len(reference[gesture]))
@@ -176,5 +178,5 @@ def show_signal(gesture):
 if __name__ == "__main__":
     extract_references()
     # classify_test("data/testset/vhs01.csv")
-    for g in gestures:
-        show_signal(g)
+    # for g in gestures:
+    #     show_signal(g)
