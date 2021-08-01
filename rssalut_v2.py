@@ -42,9 +42,11 @@ class RSSalut:
     pps = 0
     marks = []
     timer = [0, 0, 0]
+    filename = ""
 
     # class functions
     def __init__(self, filename):
+        self.filename = filename
         self.load_signal(filename)
         self._denoise()
         self._smoothen()
@@ -243,7 +245,7 @@ class RSSalut:
                  x in self.marks for x in self.timeline], marker="o")
         plt.xlabel('Time (s)')
         plt.ylabel('RSS (dBm)')
-        plt.show()
+        plt.savefig(filename[:-3]+".png")
 
 
 if __name__ == "__main__":
@@ -252,6 +254,6 @@ if __name__ == "__main__":
     n_tests = 9
     for i in range(n_start, n_tests+1):
         # i = 1
-        filename = datapath + "down_hold_up/0{}.csv".format(i)
+        filename = datapath + "up_down/0{}.csv".format(i)
         print(filename)
         salut = RSSalut(filename)
