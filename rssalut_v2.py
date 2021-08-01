@@ -43,6 +43,7 @@ class RSSalut:
     marks = []
     timer = [0, 0, 0]
     filename = ""
+    result = []
 
     # class functions
     def __init__(self, filename):
@@ -152,8 +153,12 @@ class RSSalut:
                     duration, code, marks = self.decode_event(
                         i+j-int(self.pps/2))
                     gID = which_gesture(code)
-                    print("@", self.timeline[i+base[0]],
-                          code, gestureNames[gID])  # , self.timeline[i+duration])
+                    # print("@", self.timeline[i+base[0]],
+                    #       code, gestureNames[gID])  # , self.timeline[i+duration])
+                    # if (len(self.result) == 0) or (self.timeline[i+base[0]] - self.result[-1][0] > 3):
+                    #     if gID != -1:
+                    self.result.append(
+                        (self.timeline[i+base[0]], code, gestureNames[gID]))
                     # if gestureNames[gID] != "No match":
                     #     self.marks += marks
 
@@ -161,6 +166,8 @@ class RSSalut:
                     break
                 else:
                     base = (j, w_dBm[j])
+        for i in self.result:
+            print("@", i[0], i[1], i[2])
         print("==========================")
 
     def decode_event(self, location):
@@ -170,7 +177,7 @@ class RSSalut:
         sig_inc = 10
 
         # allowed max duration of gesture
-        sig_offset = min(self.pps * 7, len(self.dBm[location:]))
+        sig_offset = min(self.pps * 6, len(self.dBm[location:]))
         window = self.dBm[location: location+sig_offset]
         marks.append(self.timeline[location])
         marks.append(self.timeline[location+sig_offset-1])
@@ -241,16 +248,16 @@ class RSSalut:
         """ Plots out the dBm signal
         """
         plt.figure(figsize=(12, 2))
-        plt.plot(self.timeline, self.dBm)  # , markevery=[
-        # x in self.marks for x in self.timeline], marker="o")
+        plt.plot(self.timeline, self.dBm, markevery=[
+            x in self.marks for x in self.timeline], marker="o")
         plt.xlabel('Time (s)')
         plt.ylabel('RSS (dBm)')
         plt.savefig(filename[:-3]+".png")
+        # plt.show()
 
 
 if __name__ == "__main__":
-    n_start = 9
-
+    n_start = 0
     n_tests = 9
     for i in range(n_start, n_tests+1):
         # i = 1
