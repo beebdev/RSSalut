@@ -1,10 +1,11 @@
 #! /usr/bin/python3
 
+import sys
 import csv
 import pywt
 import numpy as np
 import matplotlib.pyplot as plt
-import sklearn.preprocessing as skprep
+# import sklearn.preprocessing as skprep
 from scipy.signal import savgol_filter
 
 gestureNames = [u"\u001b[32mup_down\u001b[0m",
@@ -257,10 +258,12 @@ class RSSalut:
 
 
 if __name__ == "__main__":
-    n_start = 0
-    n_tests = 9
-    for i in range(n_start, n_tests+1):
-        # i = 1
-        filename = datapath + "down_hold_up/0{}.csv".format(i)
-        print(filename)
-        salut = RSSalut(filename)
+    print(sys.argv[1])
+    salut = RSSalut(sys.argv[1])
+    # n_start = 0
+    # n_tests = 9
+    # for i in range(n_start, n_tests+1):
+    #     # i = 1
+    #     filename = datapath + "down_hold_up/0{}.csv".format(i)
+    #     print(filename)
+    #     salut = RSSalut(filename)
