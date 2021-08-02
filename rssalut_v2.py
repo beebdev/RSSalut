@@ -5,7 +5,6 @@ import csv
 import pywt
 import numpy as np
 import matplotlib.pyplot as plt
-# import sklearn.preprocessing as skprep
 from scipy.signal import savgol_filter
 
 gestureNames = [u"\u001b[32mup_down\u001b[0m",
@@ -52,7 +51,6 @@ class RSSalut:
         self.load_signal(filename)
         self._denoise()
         self._smoothen()
-        # print(self.pps)
         self.event_parser()
         self.plot_dBm()
 
@@ -80,8 +78,6 @@ class RSSalut:
 
         # Lower resolution (down sampling)
         sublen = int((len(dBm) / 30))
-        # self.timeline = timeline[sublen*2:-sublen*3:3]
-        # self.dBm = dBm[sublen*2:-sublen*3:3]
         self.timeline = timeline[sublen:-sublen:3]
         self.dBm = dBm[sublen:-sublen:3]
         self.pps = int(len(self.timeline) /
@@ -135,40 +131,27 @@ class RSSalut:
             base = (0, w_dBm[0])
             for j in range(w_interval, min(window_size, len(w_dBm[w_interval:])), w_interval):
                 curr = (j, w_dBm[j])
-                # base = w_dBm[int(j/self.pps)]
                 diff = curr[1] - base[1]
-                # prev = curr
+
                 if diff > w_trigger or diff < -w_trigger:
                     # Got an event @ index j
                     prev_time = curr_time
                     curr_time = self.timeline[i+j]
                     if curr_time - prev_time < 0.5:
-                        # print("   ", curr_time, prev_time, curr_time-prev_time)
                         break
                     if diff > w_trigger:
                         a = "up"
                     else:
                         a = "down"
-                    # print("@", self.timeline[i+base[0]], a, diff, w_trigger)
                     self.marks.append(self.timeline[i+base[0]])
                     duration, code, marks = self.decode_event(
                         i+j-int(self.pps/2))
                     gID = which_gesture(code)
                     print("@", self.timeline[i+base[0]],
-                          code, gestureNames[gID])  # , self.timeline[i+duration])
-                    # if (len(self.result) == 0) or (self.timeline[i+base[0]] - self.result[-1][0] > 3):
-                    #     if gID != -1:
-                    #         self.result.append(
-                    #             (self.timeline[i+base[0]], code, gestureNames[gID]))
-                    # if gestureNames[gID] != "No match":
-                    #     self.marks += marks
-
-                    # i += duration - 2*self.pps
+                          code, gestureNames[gID])
                     break
                 else:
                     base = (j, w_dBm[j])
-        # for i in self.result:
-        #     print("@", i[0], i[1], i[2])
         print("==========================")
 
     def decode_event(self, location):
@@ -186,46 +169,36 @@ class RSSalut:
         code_string = "n"
         curr = (0, window[0])
         trigger = (max(window) - min(window)) / 7
-        # print(trigger)
-        # timer = [0, 0, 0]
         ntimer = 0
-        # print(self.timeline[location],
-        #       self.timeline[location+sig_offset-1], sig_offset, trigger)
         for i in range(sig_inc, sig_offset, sig_inc):
             prev = curr
             curr = (i, window[i])
             diff = curr[1] - prev[1]
             slope = diff / \
                 (self.timeline[curr[0]] - self.timeline[prev[0]])
-            # print(diff, trigger)
+
             if slope > 0 and diff > trigger:
                 # rising edge
                 state = "r"
-                # self.timer_set(0)
                 ntimer = 0
             elif slope < 0 and diff < -trigger:
                 # falling edge
                 state = "f"
-                # self.timer_set(1)
                 ntimer = 0
             else:
                 state = "n"
-                # self.timer_set(2)
                 ntimer += 1
 
             if state == code_string[-1]:
                 continue
             else:
-                # if self.timer_check():
                 if state != "n" or ntimer > 10:
-                    # self.timer_set(-1)
                     ntimer = 0
                     code_string += state
                     timestamp = self.timeline[location+prev[0]]
                     if timestamp not in self.marks:
                         marks.append(timestamp)
 
-        # self.marks.append(self.timeline[location+i])
         return sig_offset, "s"+code_string[1:]+"e", marks
 
     def timer_check(self):
@@ -253,13 +226,14 @@ class RSSalut:
             x in self.marks for x in self.timeline], marker="o")
         plt.xlabel('Time (s)')
         plt.ylabel('RSS (dBm)')
-        # plt.savefig(filename[:-3]+".png")
+        # plt.savefig(filename[:-4]+".png")
         plt.show()
 
 
 if __name__ == "__main__":
     print(sys.argv[1])
     salut = RSSalut(sys.argv[1])
+
     # n_start = 0
     # n_tests = 9
     # for i in range(n_start, n_tests+1):
