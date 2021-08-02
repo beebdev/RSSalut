@@ -12,7 +12,7 @@ gestureNames = [u"\u001b[32mup_down\u001b[0m",
                 "\u001b[34mdown_hold_up\u001b[0m",
                 "No match"]
 gestureCodes = [
-    ["srfne", "srfe"],
+    ["srfne", "srfe", "srnfne"],
     ["sfrnfe", "sfrne", "srfrfne", "sfrfe", "srfrne"],
     ["sfnrne", "sfnre"]]
 datapath = "data/"
@@ -153,12 +153,12 @@ class RSSalut:
                     duration, code, marks = self.decode_event(
                         i+j-int(self.pps/2))
                     gID = which_gesture(code)
-                    # print("@", self.timeline[i+base[0]],
-                    #       code, gestureNames[gID])  # , self.timeline[i+duration])
+                    print("@", self.timeline[i+base[0]],
+                          code, gestureNames[gID])  # , self.timeline[i+duration])
                     # if (len(self.result) == 0) or (self.timeline[i+base[0]] - self.result[-1][0] > 3):
                     #     if gID != -1:
-                    self.result.append(
-                        (self.timeline[i+base[0]], code, gestureNames[gID]))
+                    #         self.result.append(
+                    #             (self.timeline[i+base[0]], code, gestureNames[gID]))
                     # if gestureNames[gID] != "No match":
                     #     self.marks += marks
 
@@ -166,8 +166,8 @@ class RSSalut:
                     break
                 else:
                     base = (j, w_dBm[j])
-        for i in self.result:
-            print("@", i[0], i[1], i[2])
+        # for i in self.result:
+        #     print("@", i[0], i[1], i[2])
         print("==========================")
 
     def decode_event(self, location):
@@ -216,7 +216,7 @@ class RSSalut:
                 continue
             else:
                 # if self.timer_check():
-                if state != "n" or ntimer > 15:
+                if state != "n" or ntimer > 10:
                     # self.timer_set(-1)
                     ntimer = 0
                     code_string += state
@@ -252,8 +252,8 @@ class RSSalut:
             x in self.marks for x in self.timeline], marker="o")
         plt.xlabel('Time (s)')
         plt.ylabel('RSS (dBm)')
-        plt.savefig(filename[:-3]+".png")
-        # plt.show()
+        # plt.savefig(filename[:-3]+".png")
+        plt.show()
 
 
 if __name__ == "__main__":
@@ -261,6 +261,6 @@ if __name__ == "__main__":
     n_tests = 9
     for i in range(n_start, n_tests+1):
         # i = 1
-        filename = datapath + "up_down/0{}.csv".format(i)
+        filename = datapath + "down_hold_up/0{}.csv".format(i)
         print(filename)
         salut = RSSalut(filename)
